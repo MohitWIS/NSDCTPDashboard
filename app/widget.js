@@ -7,6 +7,11 @@ let currentGuidelineSearch = '';
 let currentGuidelineCategory = '';
 let debounceTimer;
 var IsDevelopment = false;
+var partnerDocument_certLink;
+var Agreement_Document_certLink;
+var Term_Sheet_Document_certLink;
+var Tp_ID = "";
+var Tp_Name="";
 
 document.getElementById("noticeSearchInput").addEventListener("input", function () {
     clearTimeout(debounceTimer);
@@ -39,9 +44,9 @@ function onGuidelineCategoryChange(value) {
 
 ZOHO.CREATOR.UTIL.getInitParams().then(function (response) {
     console.log(response);
-    if(response.envUrlFragment!= "/environment/development"){
+    if (response.envUrlFragment != "/environment/development") {
         getuserDetails(response.loginUser);
-    }else{
+    } else {
         IsDevelopment = true;
         getuserDetails("wlplnsdc@gmail.com");
     }
@@ -49,10 +54,10 @@ ZOHO.CREATOR.UTIL.getInitParams().then(function (response) {
 });
 
 function openCMA() {
-    if(IsDevelopment){
-        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/environment/development/customer-management-account/#Page:Training_User_Profile","_blank");
-    }else{
-        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/customer-management-account/#Page:Training_User_Profile","_blank");
+    if (IsDevelopment) {
+        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/environment/development/customer-management-account/#Page:Training_User_Profile", "_blank");
+    } else {
+        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/customer-management-account/#Page:Training_User_Profile", "_blank");
     }
 
 }
@@ -65,8 +70,8 @@ function getuserDetails(tpid) {
     };
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
         let tpId = res.data[0].TP_ID || "-";
-        document.getElementById("tpId").innerText = tpId;
-        document.getElementById("tpName").innerText = (res.data[0].TP_Name || "-");
+        document.getElementById("tpId").innerText = Tp_ID = tpId;
+        document.getElementById("tpName").innerText = Tp_Name = (res.data[0].TP_Name || "-");
         getAnnouncements(tpId);
         getOperationalSupport(tpId);
         getSocialPerformance(tpId);
@@ -99,8 +104,8 @@ function getNotifications(tpId) {
                 container.innerHTML = `<div class="dropdown-item">No new notifications</div>`;
                 return;
             }
-            document.getElementById("notification_count").innerText = data.length; 
-                document.getElementById("notification_count").style.visibility = "visible";
+            document.getElementById("notification_count").innerText = data.length;
+            document.getElementById("notification_count").style.visibility = "visible";
 
             data.forEach(item => {
                 const div = document.createElement("div");
@@ -129,8 +134,8 @@ function getNotifications(tpId) {
         }
     }).catch(function (error) {
         console.error("Error fetching notifications", error);
-        
-                document.getElementById("notification_count").style.visibility = "hidden";
+
+        document.getElementById("notification_count").style.visibility = "hidden";
         container.innerHTML = `<div class="dropdown-item">No new notifications</div>`;
     });
 }
@@ -175,55 +180,11 @@ function getOtherDocs(tpId) {
         const data = res.data;
         const latestRecord = data[data.length - 1];
         console.log(latestRecord);
-        var Agreement_URL1 = latestRecord.Agreement_URL1;
-        var Term_Sheet_URL1 = latestRecord.Term_Sheet_URL1;
-        var addedTime = latestRecord.Added_Time;
-        var formattedDate = formatDateOnly(addedTime);
-
-        document.getElementById("signedOn").innerText = "signedOn: " + formattedDate;
-        document.getElementById("UpdatedOn").innerText = "UpdatedOn: " + formattedDate;
-        if (Agreement_URL1) {
-            document.getElementById("viewBtnAgre").onclick = function () {
-                window.open(Agreement_URL1, '_blank');
-            };
-
-            document.getElementById("downloadBtnAgre").onclick = function () {
-                var fileId = Agreement_URL1.split("/file/")[1];
-
-                var url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
-
-                window.open(url, '_blank');
-
-            };
-        }
-
-        if (Term_Sheet_URL1) {
-            document.getElementById("Term_Sheet_URL1").onclick = function () {
-                window.open(Term_Sheet_URL1, '_blank');
-            };
-
-            document.getElementById("downloadTerm_Sheet_URL1").onclick = function () {
-                var fileId = Term_Sheet_URL1.split("/file/")[1];
-
-                var url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
-
-                window.open(url, '_blank');
-
-            };
-        }
+        Agreement_Document_certLink = latestRecord.Agreement_URL1;
+        Term_Sheet_Document_certLink = latestRecord.Term_Sheet_URL1;
     });
 }
-function formatDateOnly(dateStr) {
-    if (!dateStr) return "-";
 
-    var date = new Date(dateStr);
-
-    return date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    });
-}
 
 function getPartnerDocuments(tpId) {
     const config = {
@@ -239,26 +200,9 @@ function getPartnerDocuments(tpId) {
         const data = res.data;
         const latestRecord = data[data.length - 1];
         //console.log(latestRecord);
-        var certLink = latestRecord.Certificate_Link;
-        var addedTime = latestRecord.Added_Time;
-        var formattedDate = formatDateOnly(addedTime);
+        partnerDocument_certLink = latestRecord.Certificate_Link;
 
-        document.getElementById("issuedDate").innerText = "Issued: " + formattedDate;
 
-        if (certLink) {
-            document.getElementById("viewBtn").onclick = function () {
-                window.open(certLink, '_blank');
-            };
-
-            document.getElementById("downloadBtn").onclick = function () {
-                var fileId = certLink.split("/file/")[1];
-
-                var url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
-
-                window.open(url, '_blank');
-
-            };
-        }
 
         console.log(data);
 
@@ -500,14 +444,14 @@ function downloadAllDoc() {
         if (activeTab.innerText.includes("Notices")) {
             console.log("Notices active");
             noticesData.forEach(element => {
-                if(element.Document_Link){
+                if (element.Document_Link) {
                     downloadFiles(element.Document_Link);
                 }
             });
         } else if (activeTab.innerText.includes("Guidelines")) {
             console.log("Guidelines active");
             guidelinesData.forEach(element => {
-                if(element.Document_Link){
+                if (element.Document_Link) {
                     downloadFiles(element.Document_Link);
                 }
             });
@@ -574,11 +518,11 @@ function downloadFiles(files) {
     // ✅ Case 1: Already an array
     if (Array.isArray(files)) {
         fileArray = files;
-    } 
+    }
     // ✅ Case 2: Comma-separated string
     else if (typeof files === "string" && files.includes(",")) {
         fileArray = files.split(",").map(f => f.trim());
-    } 
+    }
     // ✅ Case 3: Single string / object
     else {
         fileArray = [files];
@@ -874,6 +818,75 @@ function showTab(tab) {
         guidelines.style.display = "block";
         tabs[1].classList.add("active");
         loadGuidelines();
+    }
+}
+
+var partnerDocument_docType = "";
+var partnerDocument_actionType = "";
+
+function partnerDocumentAction(docType, actionType) {
+    partnerDocument_docType = docType;
+    partnerDocument_actionType = actionType;
+    openPopup();
+
+
+}
+
+function openPopup() {
+    document.getElementById("passwordModal").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("passwordModal").style.display = "none";
+}
+
+function checkPassword() {
+    const input = document.getElementById("passwordInput").value;
+    if (input ===  Tp_Name.substring(0, 4) + Tp_ID.substring(0, 4)) { 
+        closePopup();
+        performActionOnDocument();
+    } else {
+        const error = document.getElementById("errorMsg");
+        error.textContent = "Wrong password!";
+    }
+}
+
+function performActionOnDocument() {
+    if (partnerDocument_docType === 'Partnership-Certificate') {
+        if (partnerDocument_certLink) {
+            if (partnerDocument_actionType === 'viewBtn') {
+                window.open(partnerDocument_certLink, '_blank');
+            } else if (partnerDocument_actionType === 'downloadBtn') {
+                const fileId = partnerDocument_certLink.split("/file/")[1];
+
+                const url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
+
+                window.open(url, '_blank');
+            }
+        }
+    } else if (docType === 'Agreement-Document') {
+        if (Agreement_Document_certLink) {
+            if (partnerDocument_actionType === 'viewBtn') {
+                window.open(Agreement_Document_certLink, '_blank');
+            } else if (partnerDocument_actionType === 'downloadBtn') {
+                const fileId = Agreement_Document_certLink.split("/file/")[1];
+
+                const url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
+                window.open(url, '_blank');
+
+            }
+        }
+    } else if (docType === 'Term-sheet') {
+        if (Term_Sheet_Document_certLink) {
+            if (partnerDocument_actionType === 'viewBtn') {
+                window.open(Term_Sheet_Document_certLink, '_blank');
+            } else if (partnerDocument_actionType === 'downloadBtn') {
+                const fileId = Term_Sheet_Document_certLink.split("/file/")[1];
+
+                const url = `https://files-accl.zohoexternal.in/public/workdrive-external/download/${fileId}`;
+                window.open(url, '_blank');
+            }
+        }
     }
 }
 

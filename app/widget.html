@@ -14,7 +14,7 @@
     <div class="nsdc-header">
       <div class="header-top">
         <div class="left">
-          <div class="logo-box"><img src="nsdc.png" style="width: 100px;"></div>
+          <div class="logo-box"><img src="Icon/nsdc.png" style="width: 100px;"></div>
           <div class="title">NSDC Non-Funded Portfolio</div>
         </div>
 
@@ -50,11 +50,11 @@
         </div>
       </div>
       <div class="sections-header">
-        Latest Announcement
+        <div class="ticker-container">
+          <div class="ticker-track" id="tickerTrack"></div>
+        </div>
       </div>
-      <div class="ticker-container">
-        <div class="ticker-track" id="tickerTrack"></div>
-      </div>
+      
       <a class="bottom_Desing"></a>
     </div>
 
@@ -62,35 +62,44 @@
     <div class="card-grid">
 
       <div class="card" onclick="window.open('https://support.nsdcindia.org/portal/en/newticket?departmentId=70758000000010772&layoutId=70758000000011350', '_blank')">
+        <span class="card-icon"><img src="Icon/support_agent.svg" alt="IT Support"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>IT Support</h3>
-        <p>(Send user to SIDH ticket portal)</p>
       </div>
 
       <div class="card" onclick="goToSection('operationalSupportSection')">
+        <span class="card-icon"><img src="Icon/support.svg" alt="Operational Support"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Operational Support</h3>
-        <p>(Raise query for operational requirement)</p>
       </div>
 
       <div class="card" onclick="goToSection('socialDashboardSection')">
+        <span class="card-icon"><img src="Icon/social_leaderboard.svg" alt="Social Performance Dashboard"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Social Performance Dashboard</h3>
-        <p>(View last 3 year social performance)</p>
       </div>
 
       <div class="card" onclick="goToSection('informationHubSection')">
+        <span class="card-icon"><img src="Icon/crowdsource.svg" alt="Information Hub"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Information Hub</h3>
-        <p>(SOP & Guidelines)</p>
       </div>
 
       <div class="card" onclick="goToSection('noticeandGuidelineSection')">
+        <span class="card-icon"><img src="Icon/pinboard.svg" alt="Notices and Guidelines"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Notices and Guidelines</h3>
       </div>
 
       <div class="card" onclick="goToSection('partnerDocumentsSection')">
+        <span class="card-icon"><img src="Icon/contract.svg" alt="Agreement / Termsheet"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Agreement / Termsheet</h3>
-        <p>Certificates / Invoices</p>
       </div>
 
       <div class="card" onclick="goToSection('partnershipRenewalSection')">
+        <span class="card-icon"><img src="Icon/partner_exchange.svg" alt="Partnership Renewal"></span>
+        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
         <h3>Partnership Renewal</h3>
       </div>
 
@@ -290,14 +299,10 @@
           </div>
 
           <div class="doc-footer">
-            <div>
-              <span id="issuedDate">Issued: -</span>
-              <!-- <p>2.3 MB</p> -->
-            </div>
 
             <div class="actions">
-              <button class="btn-outline" id="viewBtn">👁 View</button>
-              <button class="btn-dark" id="downloadBtn"><img src="Icon/download_white.svg" alt="Download">
+              <button class="btn-outline" id="viewBtn" onclick="partnerDocumentAction('Partnership-Certificate', 'viewBtn')">👁 View</button>
+              <button class="btn-dark" id="downloadBtn" onclick="partnerDocumentAction('Partnership-Certificate', 'downloadBtn')"><img src="Icon/download_white.svg" alt="Download">
                 Download</button>
             </div>
           </div>
@@ -316,14 +321,10 @@
           </div>
 
           <div class="doc-footer">
-            <div>
-              <span id="signedOn">Signed: </span>
-
-            </div>
 
             <div class="actions">
-              <button class="btn-outline" id="viewBtnAgre">👁 View</button>
-              <button class="btn-dark" id="downloadBtnAgre"><img src="Icon/download_white.svg" alt="Download">
+              <button class="btn-outline" id="viewBtnAgre" onclick="partnerDocumentAction('Agreement-Document', 'viewBtnAgre')">👁 View</button>
+              <button class="btn-dark" id="downloadBtnAgre" onclick="partnerDocumentAction('Agreement-Document', 'downloadBtnAgre')"><img src="Icon/download_white.svg" alt="Download">
                 Download</button>
             </div>
           </div>
@@ -342,14 +343,10 @@
           </div>
 
           <div class="doc-footer">
-            <div>
-              <span id="UpdatedOn">Updated: </span>
-
-            </div>
 
             <div class="actions">
-              <button class="btn-outline" id="Term_Sheet_URL1">👁 View</button>
-              <button class="btn-dark" id="downloadTerm_Sheet_URL1"><img src="Icon/download_white.svg" alt="Download">
+              <button class="btn-outline" id="Term_Sheet_URL1" onclick="partnerDocumentAction('Term-sheet', 'Term_Sheet_URL1')">👁 View</button>
+              <button class="btn-dark" id="downloadTerm_Sheet_URL1" onclick="partnerDocumentAction('Term-sheet', 'downloadTerm_Sheet_URL1')"><img src="Icon/download_white.svg" alt="Download">
                 Download</button>
             </div>
           </div>
@@ -438,6 +435,17 @@
 
   </div>
 
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h3>Enter Password</h3>
+      <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" />
+      <div class="actions">
+        <button class="btn btn-success" onclick="checkPassword()">Submit</button>
+        <button class="raise-btn" onclick="closePopup()">Cancel</button>
+      </div>
+      <p id="errorMsg"></p>
+    </div>
+  </div>
 
   <script type="text/javascript" src="widget.js"></script>
 </body>

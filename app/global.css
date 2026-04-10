@@ -23,9 +23,12 @@
 }
 
 .logo-box {
-    width: 40px;
-    height: 40px;
-    margin-right: 60px;
+    margin-right: 5px;
+}
+
+.logo-box img {
+    height: 100%;
+    object-fit: contain;
 }
 
 .title {
@@ -385,8 +388,8 @@ button svg {
 
 .ticker-container {
   overflow: hidden;
-  background: #fff;
   border-radius: 6px;
+  font-size: medium!important;
   position: relative;
 }
 
@@ -732,6 +735,7 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+    float: right;
 }
 
 .btn-outline {
@@ -876,6 +880,7 @@ tbody tr {
 }
 
 .card {
+    text-align: center;
     background: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -883,6 +888,8 @@ tbody tr {
     margin-bottom: 16px;
     border-radius: 12px;
     transition: all 0.3s ease;
+     position: relative;
+    overflow: visible;
 }
 
 .card:hover {
@@ -898,6 +905,36 @@ tbody tr {
 .card p {
     color: #6b7280;
     font-size: 14px;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+
+    width: 27vw;
+    max-width: 30vw;
+    text-align: left;
+    line-height: 1.4;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+
+    z-index: 100;
+}
+
+/* Show on hover */
+.card-icon:hover + .tooltip {
+    opacity: 0.9;
+    visibility: visible;
 }
 
 .top-row {
@@ -1140,6 +1177,70 @@ tbody tr {
   font-weight: 500;
 }
 
+/* Modal background */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal box */
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 33vw;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+
+#errorMsg {
+  color: red;
+}
+
+/* Bootstrap-like input */
+.form-control {
+    margin: 10px 0px;
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #212529;
+
+  background-color: #fff;
+  background-clip: padding-box;
+
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-sizing: border-box;
+}
+
+/* Focus state */
+.form-control:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #86b7fe;
+
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Placeholder */
+.form-control::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
 /* Mobile tweaks */
 @media (max-width: 768px) {
   .custom-table th,
@@ -1168,5 +1269,9 @@ tbody tr {
     .btn-outline {
         width: 100%;
         text-align: center;
+    }
+    .tooltip{        
+        width: 90vw;
+        max-width: 95vw;
     }
 }
