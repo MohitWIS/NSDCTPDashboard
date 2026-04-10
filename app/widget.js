@@ -7,7 +7,7 @@ let currentGuidelineSearch = '';
 let currentGuidelineCategory = '';
 let debounceTimer;
 var IsDevelopment = false;
-var tp_Id = "";
+
 document.getElementById("noticeSearchInput").addEventListener("input", function () {
     clearTimeout(debounceTimer);
 
@@ -38,10 +38,10 @@ function onGuidelineCategoryChange(value) {
 
 
 ZOHO.CREATOR.UTIL.getInitParams().then(function (response) {
-    //console.log(response);
-    if (response.envUrlFragment != "/environment/development") {
+    console.log(response);
+    if(response.envUrlFragment!= "/environment/development"){
         getuserDetails(response.loginUser);
-    } else {
+    }else{
         IsDevelopment = true;
         getuserDetails("wlplnsdc@gmail.com");
     }
@@ -49,31 +49,28 @@ ZOHO.CREATOR.UTIL.getInitParams().then(function (response) {
 });
 
 function openCMA() {
-    if (IsDevelopment) {
-        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/environment/development/customer-management-account/#Page:Training_User_Profile", "_blank");
-    } else {
-        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/customer-management-account/#Page:Training_User_Profile", "_blank");
+    if(IsDevelopment){
+        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/environment/development/customer-management-account/#Page:Training_User_Profile","_blank");
+    }else{
+        window.open("https://creatorapp.zoho.in/itzoho_nsdcindia/customer-management-account/#Page:Training_User_Profile","_blank");
     }
 
 }
 
 function getuserDetails(tpid) {
-    //console.log(tpid);
     var config1 = {
         app_name: "customer-management-account",
         report_name: "Copy_of_CMA_Report",
-        criteria: "TP_SPOC_Email_ID_for_regular_communication == \"" + tpid + "\""
+        criteria: "(TP_SPOC_Email_ID_for_regular_communication == \"" + tpid + "\")"
     };
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
-        //  console.log(res.data[0].TP_ID)
         let tpId = res.data[0].TP_ID || "-";
-        tp_Id = res.data[0].TP_ID || "-";
         document.getElementById("tpId").innerText = tpId;
         document.getElementById("tpName").innerText = (res.data[0].TP_Name || "-");
         getAnnouncements(tpId);
         getOperationalSupport(tpId);
         getSocialPerformance(tpId);
-        loadNotices(tpId);
+        loadNotices();
         getInformationHub();
         getPartnerDocuments(tpId);
         getOtherDocs(tpId);
@@ -95,15 +92,15 @@ function getNotifications(tpId) {
 
         if (res.code == 3000) {
             var data = res.data;
-            //console.log(data);
+            console.log(data);
 
             if (data.length === 0) {
                 document.getElementById("notification_count").style.visibility = "hidden";
                 container.innerHTML = `<div class="dropdown-item">No new notifications</div>`;
                 return;
             }
-            document.getElementById("notification_count").innerText = data.length;
-            document.getElementById("notification_count").style.visibility = "visible";
+            document.getElementById("notification_count").innerText = data.length; 
+                document.getElementById("notification_count").style.visibility = "visible";
 
             data.forEach(item => {
                 const div = document.createElement("div");
@@ -132,8 +129,8 @@ function getNotifications(tpId) {
         }
     }).catch(function (error) {
         console.error("Error fetching notifications", error);
-
-        document.getElementById("notification_count").style.visibility = "hidden";
+        
+                document.getElementById("notification_count").style.visibility = "hidden";
         container.innerHTML = `<div class="dropdown-item">No new notifications</div>`;
     });
 }
@@ -158,7 +155,7 @@ function markAllRead(data) {
 
     Promise.all(updatePromises)
         .then(responses => {
-            // console.log("All notifications marked as read", responses);
+            console.log("All notifications marked as read", responses);
 
             // Refresh notifications
             getNotifications();
@@ -177,7 +174,7 @@ function getOtherDocs(tpId) {
     ZOHO.CREATOR.DATA.getRecords(config).then(function (res) {
         const data = res.data;
         const latestRecord = data[data.length - 1];
-        //     console.log(latestRecord);
+        console.log(latestRecord);
         var Agreement_URL1 = latestRecord.Agreement_URL1;
         var Term_Sheet_URL1 = latestRecord.Term_Sheet_URL1;
         var addedTime = latestRecord.Added_Time;
@@ -263,7 +260,7 @@ function getPartnerDocuments(tpId) {
             };
         }
 
-        // console.log(data);
+        console.log(data);
 
         var html = "";
 
@@ -336,18 +333,17 @@ function filterNoticeList() {
 
 }
 
-function loadNotices(tpid) {
+function loadNotices() {
 
     const config = {
         app_name: "customer-management-account",
-        report_name: "Notices_Subform_Report",
-        criteria: "(Training_Partner_ID == \"" + tpid + "\")"
+        report_name: "Notices_Subform_Report"
     };
 
     ZOHO.CREATOR.DATA.getRecords(config).then(function (res) {
 
         noticesData = res.data || [];
-        // console.log("Fetched notices:", noticesData);
+        console.log("Fetched notices:", noticesData);
         renderNotices(); // initial render
     });
 }
@@ -356,12 +352,11 @@ function loadGuidelines() {
 
     const config = {
         app_name: "customer-management-account",
-        report_name: "Guidelines_Subform_Report",
-        criteria: "(Training_Partner_ID == \"" + tp_Id + "\")"
+        report_name: "Guidelines_Subform_Report"
     };
     ZOHO.CREATOR.DATA.getRecords(config).then(function (res) {
         guidelinesData = res.data || [];
-        //  console.log("Fetched guidelinesData:", guidelinesData);
+        console.log("Fetched guidelinesData:", guidelinesData);
         renderGuidelines(); // initial render
     });
 }
@@ -403,7 +398,7 @@ function renderGuidelines() {
         card.className = "card";
 
         card.innerHTML = `
-            <h3>${item.Title || 'N/A'}</h3>
+            <h3>${item.Training_Partner_Name || 'N/A'}</h3>
             
             <span class="tag">${item.Category || 'General'}</span>
             
@@ -459,7 +454,7 @@ function renderNotices() {
             <div class="card notice">
             
             <div class="card-top">
-                <h3>${item.Title || 'Notice Title'}</h3>
+                <h3>${item.Training_Partner_Name || 'Notice Title'}</h3>
                 <span class="badge">${item.Priority || ''}</span>
             </div>
 
@@ -503,16 +498,16 @@ function downloadAllDoc() {
 
     if (activeTab) {
         if (activeTab.innerText.includes("Notices")) {
-            // console.log("Notices active");
+            console.log("Notices active");
             noticesData.forEach(element => {
-                if (element.Document_Link) {
+                if(element.Document_Link){
                     downloadFiles(element.Document_Link);
                 }
             });
         } else if (activeTab.innerText.includes("Guidelines")) {
-            //console.log("Guidelines active");
+            console.log("Guidelines active");
             guidelinesData.forEach(element => {
-                if (element.Document_Link) {
+                if(element.Document_Link){
                     downloadFiles(element.Document_Link);
                 }
             });
@@ -529,7 +524,7 @@ function getGuidelines(filterValue) {
     };
     ZOHO.CREATOR.DATA.getRecords(config).then(function (res) {
         // Handle guidelines data
-        //   console.log("Guidelines:", res.data);
+        console.log("Guidelines:", res.data);
         const data = guidelinesData = res.data;
         const container = document.getElementById("guidelineCardContainer");
         container.innerHTML = "";
@@ -579,11 +574,11 @@ function downloadFiles(files) {
     // ✅ Case 1: Already an array
     if (Array.isArray(files)) {
         fileArray = files;
-    }
+    } 
     // ✅ Case 2: Comma-separated string
     else if (typeof files === "string" && files.includes(",")) {
         fileArray = files.split(",").map(f => f.trim());
-    }
+    } 
     // ✅ Case 3: Single string / object
     else {
         fileArray = [files];
@@ -619,12 +614,10 @@ function downloadFiles(files) {
 }
 
 function getAnnouncements(tpid) {
-    console.log(tpid);
     // 🔹 Step 1: Get occupied employees
     var config1 = {
         app_name: "customer-management-account",
         report_name: "Announcements_Subform_Report",
-        criteria: "(Training_Partner_ID == \"" + tpid + "\")"
     };
     const tId = tpid;
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
@@ -679,11 +672,10 @@ function getOperationalSupport(tpId) {
     const tId = tpId;
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
         var data = res.data;
-        console.log(tId);
         var html = "";
         data.forEach(item => {
             //console.log(item["Record_ID.Training_Partner_ID"]?.TP_ID);
-            if (tId == item.Training_Partner_ID) {
+            if (tId == item.Training_Partner_ID1.TP_ID) {
                 //console.log(item);
 
                 var ticketId = item.Ticket_ID || "-";
@@ -803,99 +795,6 @@ function getSocialPerformance(tpId) {
     });
 }
 
-
-var files = [
-    {
-        name: "Onboarding SOP.pdf",
-        link: "https://example.com/file1"
-    },
-    {
-        name: "Guidelines.docx",
-        link: "https://example.com/file2"
-    }
-];
-
-// Open modal
-document.getElementById("onboardingNew").onclick = function () {
-    openModal(1);
-};
-
-document.getElementById("operationalNew").onclick = function () {
-    openModal(2);
-};
-
-document.getElementById("agreementNew").onclick = function () {
-    openModal(3);
-};
-
-document.getElementById("sidhNew").onclick = function () {
-    openModal(4);
-};
-
-document.getElementById("monitoringNew").onclick = function () {
-    openModal(5);
-};
-
-document.getElementById("otherNew").onclick = function () {
-    openModal(6);
-};
-
-// Function to open modal
-function openModal(id) {
-    var config1 = {
-        app_name: "customer-management-account",
-        report_name: "Copy_of_All_Information_Hubs1"
-    };
-    ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
-
-        let rawLinks = "";
-        if (id == 1) {
-            rawLinks = res.data[0].Onboarding_SOP_Link;
-        } else if (id == 2) {
-            rawLinks = res.data[0].Operational_Guidelines_Link;
-        } else if (id == 3) {
-            rawLinks = res.data[0].Agreement_Renewal_Process_Link;
-        } else if (id == 4) {
-            rawLinks = res.data[0].SIDH_Process_Flow_Link;
-        } else if (id == 5) {
-            rawLinks = res.data[0].Monitoring_Guidelines_Link;
-        } else if (id == 6) {
-            rawLinks = res.data[0].Other_Reference_Documents_Link;
-        }
-        console.log(rawLinks);
-        var linksArray = rawLinks.split(",").map(l => l.trim()).filter(l => l);
-        var container = document.getElementById("fileList");
-        container.innerHTML = "";
-        linksArray.forEach(function (link, index) {
-
-            var fileName = "Document " + (index + 1); // you can customize
-
-            var div = document.createElement("div");
-            div.className = "file-item";
-
-            div.innerHTML = `
-            <span>📄 ${fileName}</span>
-            <button class="view-btn" onclick="window.open('${link}', '_blank')">View</button>
-        `;
-
-            container.appendChild(div);
-        });
-
-        document.getElementById("fileModal").style.display = "block";
-
-    });
-
-
-
-}
-
-// Close modal
-function closeModal() {
-    document.getElementById("fileModal").style.display = "none";
-}
-
-
-
 function getInformationHub() {
     var config1 = {
         app_name: "customer-management-account",
@@ -936,9 +835,6 @@ function goToSection(id) {
     document.getElementById(id).scrollIntoView({
         behavior: 'smooth'
     });
-}
-function goToTrainerCentralWebinar() {
-    window.open("https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149", '_blank');
 }
 
 function goToSection(id) {
