@@ -1,0 +1,36 @@
+[error] [2026-04-08T06:16:13.618Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-08T06:16:13.620Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-08T06:16:13.621Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-08T06:16:13.621Z] :  ==> app\data30-03.zip
+[info] [2026-04-08T06:16:13.622Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
+[error] [2026-04-08T06:16:27.739Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-08T06:16:27.741Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-08T06:16:27.742Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-08T06:16:27.742Z] :  ==> app\data30-03.zip
+[info] [2026-04-08T06:16:27.742Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
+[error] [2026-04-08T06:16:27.752Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-08T06:16:27.753Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-08T06:16:27.753Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-08T06:16:27.754Z] :  ==> app\data30-03.zip
+[info] [2026-04-08T06:16:27.754Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
+[error] [2026-04-10T01:37:48.720Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-10T01:37:48.730Z] :  ==> app\09-04-2026.zip
+[info] [2026-04-10T01:37:48.730Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-10T01:37:48.731Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-10T01:37:48.731Z] :  ==> app\data.zip
+[info] [2026-04-10T01:37:48.732Z] :  ==> app\data30-03.zip
+[info] [2026-04-10T01:37:48.733Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
+[error] [2026-04-10T01:37:51.974Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-10T01:37:51.978Z] :  ==> app\09-04-2026.zip
+[info] [2026-04-10T01:37:51.979Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-10T01:37:51.979Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-10T01:37:51.980Z] :  ==> app\data.zip
+[info] [2026-04-10T01:37:51.981Z] :  ==> app\data30-03.zip
+[info] [2026-04-10T01:37:51.982Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
+[error] [2026-04-10T01:37:51.993Z] : × Below file formats are not allowed in Sigma
+[info] [2026-04-10T01:37:51.994Z] :  ==> app\09-04-2026.zip
+[info] [2026-04-10T01:37:51.995Z] :  ==> app\BackUp08-04-2026.zip
+[info] [2026-04-10T01:37:51.995Z] :  ==> app\BackUp27-03.zip
+[info] [2026-04-10T01:37:51.995Z] :  ==> app\data.zip
+[info] [2026-04-10T01:37:51.996Z] :  ==> app\data30-03.zip
+[info] [2026-04-10T01:37:51.996Z] : Note - File formats that can be packed are: txt, md, xml, dre, jpg, jpeg, png, gif, css, js, html, json, mp3, svg, woff, ttf, eot, webm, mp4, and woff2
