@@ -194,7 +194,7 @@ function getPartnerDocuments(tpId) {
     };
     ZOHO.CREATOR.DATA.getRecords(config).then(function (res) {
         if (res.code != 3000) {
-            document.getElementById("invoiceTableBody").innerHTML = `<tr><td colspan="6">No invoices found</td></tr>`;
+            document.getElementById("invoiceTableBody").innerHTML = `<tr><td colspan="9">No invoices found</td></tr>`;
             return;
         }
         const data = res.data;
@@ -213,7 +213,6 @@ function getPartnerDocuments(tpId) {
             var item = data[i];
 
             var quarter = item.Quarter || "-";
-            var amount = item.Invoice_Amount || "0";
             var status = item.Status || "-";
             var dueDate = item.Due_Date;
 
@@ -221,17 +220,55 @@ function getPartnerDocuments(tpId) {
             // Status styling
             var statusClass = status.toLowerCase() === "paid" ? "closed" : "open";
 
+            let paymentReceiptHtml = '';
+
+            if (item.Payment_Receipt) {
+                 // Extract file name from URL
+                let fileName = item.Payment_Receipt.split("filepath=")[1] || "Download File";
+
+                // Optional: decode URL (in case of spaces or special chars)
+                fileName = decodeURIComponent(fileName);
+
+                paymentReceiptHtml = `
+                    <a href="${item.Payment_Receipt}" target="_blank" class="file-link">
+                        ${fileName}
+                    </a>
+                `;
+            } else {
+                paymentReceiptHtml = `
+                    <input type="file" id="file_${item.ID}" />
+                `;
+            }
+
             html += `
             <tr>
                 <td data-label="Quarter">${quarter}</td>
                 <td data-label="Invoice">-</td>
                 <td data-label="Due Date">${dueDate}</td>
-                <td data-label="Amount" class="amount">₹ ${amount}</td>
-                <td data-label="Status">
-                    <span class=" status ${statusClass}">${status}</span>
+
+                <td data-label="UTR Number">
+                    <input type="text" id="utr_${item.ID}" class="form-control" value="${item.UTR_Number || ''}" />
                 </td>
-                <td data-label="Action" class="action" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
-                    <img src="Icon/download_grey.svg" alt="Download"> Download
+
+                <td data-label="Payment Receipt">
+                    ${paymentReceiptHtml}
+                </td>
+
+                <td data-label="Status">
+                    <span class="status ${statusClass}">${status}</span>
+                </td>
+
+                <td onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
+                    <img src="Icon/download_grey.svg"> Download
+                </td>
+
+                <td>
+                    <button onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'
+                    class="btn btn-primary">Pay Now</button>
+                </td>
+
+                <td>
+                    <button class="btn btn-primary" onclick='submitQueryInvoiceDetails("${item.ID}")'>Submit</button>
                 </td>
             </tr>
         `;
@@ -247,6 +284,59 @@ function getPartnerDocuments(tpId) {
         console.error("Error fetching All_Mlp_Data", error);
         document.getElementById("invoiceTableBody").innerHTML = `<tr><td colspan="6" style="text-align: center; font-size: large;   font-weight: bold;">No invoices found</td></tr>`;
     });
+}
+
+async function submitQueryInvoiceDetails(recordId) {
+
+    try {
+        // Get UTR value
+        const utrValue = document.getElementById(`utr_${recordId}`).value;
+
+        // Get file
+        const fileInput = document.getElementById(`file_${recordId}`);
+        const file = fileInput.files[0];
+
+        if (!utrValue && !file) {
+            alert("Please enter UTR or upload receipt");
+            return;
+        }
+
+        const config = {
+            app_name: "customer-management-account",
+            report_name: "All_Mlp_Data",
+            id: recordId,
+            payload: {
+                data: {
+                    UTR_Number: utrValue
+                }
+            }
+        };
+
+        ZOHO.CREATOR.DATA.updateRecordById(config).then(function (response) {
+        if (response.code == 3000) {
+            console.log(response);
+        } });
+
+        // Step 2: Upload File (if exists)
+        if (file) {
+            const fileConfig = {
+                app_name: "customer-management-account",
+                report_name: "All_Mlp_Data",
+                id : recordId,
+                field_name : "Payment_Receipt",
+                file : file
+            };
+            ZOHO.CREATOR.FILE.uploadFile(fileConfig).then(function (response) {
+                console.log(response);
+            });
+        }
+
+        alert("Record updated successfully!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Error updating record");
+    }
 }
 
 function convertToDownloadAuthUrl(viewUrl) {
@@ -399,7 +489,7 @@ function renderNotices() {
             
             <div class="card-top">
                 <h3>${item.Training_Partner_Name || 'Notice Title'}</h3>
-                <span class="badge">${item.Priority || ''}</span>
+                <span class="badge ${item.Priority === 'High Priority' ? 'danger' : item.Priority === 'Medium Priority' ? 'warning' : 'success'}">${item.Priority || ''}</span>
             </div>
 
             <p>${item.Notice || ''}</p>
@@ -671,6 +761,8 @@ function getSocialPerformance(tpId) {
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
 
         var data = res.data;
+        console.log(data);
+        document.getElementById("social-modified-date").innerText = "Last Updated Date: " + (data[0]?.Modified_Time ? formatDate(data[0].Modified_Time) : "-"); 
         var html = "";
         var fyList = [
             "Financial Year 2023-24",
