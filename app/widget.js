@@ -22,14 +22,14 @@ document.getElementById("noticeSearchInput").addEventListener("input", function 
     }, 300);
 });
 
-document.getElementById("guidelineSearchInput").addEventListener("input", function () {
-    clearTimeout(debounceTimer);
+// document.getElementById("guidelineSearchInput").addEventListener("input", function () {
+//     clearTimeout(debounceTimer);
 
-    debounceTimer = setTimeout(() => {
-        currentGuidelineSearch = this.value.trim();
-        renderGuidelines();
-    }, 300);
-});
+//     debounceTimer = setTimeout(() => {
+//         currentGuidelineSearch = this.value.trim();
+//         renderGuidelines();
+//     }, 300);
+// });
 
 function onCategoryChange(value) {
     currentCategory = value;
@@ -84,14 +84,20 @@ function getuserDetails(tpid) {
 }
 
 function getNotifications(tpId) {
+    
     const container = document.getElementById("dropdownMenu");
     container.innerHTML = ""; // clear old items
+
+
     var config1 = {
         app_name: "customer-management-account",
         report_name: "All_Notifications",
         criteria: "(Mark_as_Read == false && Training_Partner_ID == \"" + tpId + "\")"
 
     };
+
+    
+        
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
 
 
@@ -134,7 +140,6 @@ function getNotifications(tpId) {
         }
     }).catch(function (error) {
         console.error("Error fetching notifications", error);
-
         document.getElementById("notification_count").style.visibility = "hidden";
         container.innerHTML = `<div class="dropdown-item">No new notifications</div>`;
     });
@@ -218,7 +223,7 @@ function getPartnerDocuments(tpId) {
 
 
             // Status styling
-            var statusClass = status.toLowerCase() === "paid" ? "closed" : "open";
+            const statusClass = status.toLowerCase() === "Paid" ? "closed" : "Open";
 
             let paymentReceiptHtml = '';
 
@@ -230,9 +235,7 @@ function getPartnerDocuments(tpId) {
                 fileName = decodeURIComponent(fileName);
 
                 paymentReceiptHtml = `
-                    <a href="${item.Payment_Receipt}" target="_blank" class="file-link">
-                        ${fileName}
-                    </a>
+                <a href="${item.Payment_Receipt}" target="_blank" class="view-link">${fileName}</a>
                 `;
             } else {
                 paymentReceiptHtml = `
@@ -240,49 +243,40 @@ function getPartnerDocuments(tpId) {
                 `;
             }
 
-            html += `
+            html+=`
             <tr>
-                <td data-label="Quarter">${quarter}</td>
-                <td data-label="Invoice">-</td>
-                <td data-label="Due Date">${dueDate}</td>
-
+                <td>${quarter}</td>
+                <td style="color:var(--gray-500);">-</td>
+                <td>${dueDate}</td>
                 <td data-label="UTR Number">
                     <input type="text" id="utr_${item.ID}" class="form-control" value="${item.UTR_Number || ''}" />
                 </td>
-
-                <td data-label="Payment Receipt">
+                 <td data-label="Payment Receipt">
                     ${paymentReceiptHtml}
                 </td>
-
-                <td data-label="Status">
-                    <span class="status ${statusClass}">${status}</span>
-                </td>
-
-                <td onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
+                <td><span class="badge badge-${statusClass}">${status}</span></td>
+                <td class="view-link" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
                     <img src="Icon/download_grey.svg"> Download
                 </td>
-
-                <td>
-                    <button onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'
-                    class="btn btn-primary">Pay Now</button>
+                 <td>
+                    <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
                 </td>
-
                 <td>
                     <button class="btn btn-primary" onclick='submitQueryInvoiceDetails("${item.ID}")'>Submit</button>
                 </td>
             </tr>
-        `;
+            `;
         }
 
         // Handle empty data
         if (data.length === 0) {
-            html = `<tr><td colspan="6">No invoices found</td></tr>`;
+            html = `<tr><td colspan="9">No invoices found</td></tr>`;
         }
 
         document.getElementById("invoiceTableBody").innerHTML = html;
     }).catch(function (error) {
         console.error("Error fetching All_Mlp_Data", error);
-        document.getElementById("invoiceTableBody").innerHTML = `<tr><td colspan="6" style="text-align: center; font-size: large;   font-weight: bold;">No invoices found</td></tr>`;
+        document.getElementById("invoiceTableBody").innerHTML = `<tr><td colspan="9" style="text-align: center; font-size: large;   font-weight: bold;">No invoices found</td></tr>`;
     });
 }
 
@@ -294,10 +288,10 @@ async function submitQueryInvoiceDetails(recordId) {
 
         // Get file
         const fileInput = document.getElementById(`file_${recordId}`);
-        const file = fileInput.files[0];
+        const file = (fileInput) ? fileInput.files[0] : null;
 
-        if (!utrValue && !file) {
-            alert("Please enter UTR or upload receipt");
+        if (!utrValue) {
+            alert("Please enter UTR Number");
             return;
         }
 
@@ -481,44 +475,32 @@ function renderNotices() {
 
     // ✅ Render
     filteredData.forEach(item => {
+        const noticeDiv = document.createElement("div");
 
-        const li = document.createElement("li");
-
-        li.innerHTML = `
-            <div class="card notice">
-            
-            <div class="card-top">
-                <h3>${item.Training_Partner_Name || 'Notice Title'}</h3>
-                <span class="badge ${item.Priority === 'High Priority' ? 'danger' : item.Priority === 'Medium Priority' ? 'warning' : 'success'}">${item.Priority || ''}</span>
+        noticeDiv.innerHTML=`
+            <div class="notice-card">
+            <div class="notice-card-top">
+                <h4>${item.Training_Partner_Name || 'Notice Title'}</h4>
+                <span class="badge badge-${item.Priority === 'High Priority' ? 'Open' : item.Priority === 'Medium Priority' ? 'Pending' : 'Paid'}">${item.Priority || ''}</span>
             </div>
-
             <p>${item.Notice || ''}</p>
-
-            <div class="meta">
-                <span>
-                    <img src="Icon/calendar.svg" />
-                    ${item.Date_field || ''}
-                </span>
-
-                <span>
-                    <img src="Icon/tag.svg" />
-                    ${item.Category || ''}
-                </span>
-
-                ${item.Document_Link
-                ? `<span style="cursor:pointer"
-                            onclick="downloadFiles('${item.Document_Link}')">
-                        <img src="Icon/download_Blue.svg" />
-                        Download
-                    </span>`
-                : ''
-            }
+            <div class="notice-meta">
+            <span>
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                ${item.Date_field || ''}
+            </span>
+            <span>
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                ${item.Category || ''}
+            </span>
+            ${item.Document_Link
+                    ? `<span class="notice-download" onclick="noticeDocumentAction('SingleNotice', '${item.Document_Link}')">⬇ Download</span>`
+                    : ''
+                }
             </div>
+        </div>`;
 
-            </div>
-        `;
-
-        container.appendChild(li);
+        container.appendChild(noticeDiv);
     });
 
     // ✅ Optional: No data message
@@ -528,10 +510,10 @@ function renderNotices() {
 }
 
 function downloadAllDoc() {
-    const activeTab = document.querySelector(".tab.active");
+    const activeTab = document.querySelector(".ntab.active");
 
     if (activeTab) {
-        if (activeTab.innerText.includes("Notices")) {
+        if (activeTab.innerText.includes("NOTICES")) {
             console.log("Notices active");
             noticesData.forEach(element => {
                 if (element.Document_Link) {
@@ -719,11 +701,11 @@ function getOperationalSupport(tpId) {
                 var status = item.Status || "-";
                 html += `
                 <tr>
-                    <td><a href="#">#${ticketId}</a></td>
+                    <td><span class="view-link">#${ticketId}</span></td>
                     <td>${formatDate(createdOn)}</td>
                     <td>${subject}</td>
                     <td>${response}</td>
-                    <td><span class="status ${status}">${status}</span></td>
+                    <td><span class="badge badge-${status}">${status}</span></td>
                 </tr>
                 `;
             }
@@ -810,13 +792,11 @@ function getSocialPerformance(tpId) {
 
                     html += `
                         <tr>
-                            <td>${tpId}</td>
+                             <td>${tpId}</td>
                             <td>${tpName}</td>
                             <td>${fy}</td>
-                            <td>${enrolled}</td>
-                            <td>${trained}</td>
-                            <td>${certified}</td>
-                            <td>${placed}</td>
+                            <td>${enrolled}</td><td>${trained}</td><td>${certified}</td>
+                            <td class="placed-val">${placed}</td>
                         </tr>
                     `;
                 }
@@ -920,8 +900,12 @@ function partnerDocumentAction(docType, actionType) {
     partnerDocument_docType = docType;
     partnerDocument_actionType = actionType;
     openPopup();
+}
 
-
+function noticeDocumentAction(docType, actionType) {
+    partnerDocument_docType = docType;
+    partnerDocument_actionType = actionType;
+    openPopup();
 }
 
 function openPopup() {
@@ -956,7 +940,7 @@ function performActionOnDocument() {
                 window.open(url, '_blank');
             }
         }
-    } else if (docType === 'Agreement-Document') {
+    } else if (partnerDocument_docType === 'Agreement-Document') {
         if (Agreement_Document_certLink) {
             if (partnerDocument_actionType === 'viewBtn') {
                 window.open(Agreement_Document_certLink, '_blank');
@@ -968,7 +952,7 @@ function performActionOnDocument() {
 
             }
         }
-    } else if (docType === 'Term-sheet') {
+    } else if (partnerDocument_docType === 'Term-sheet') {
         if (Term_Sheet_Document_certLink) {
             if (partnerDocument_actionType === 'viewBtn') {
                 window.open(Term_Sheet_Document_certLink, '_blank');
@@ -979,15 +963,24 @@ function performActionOnDocument() {
                 window.open(url, '_blank');
             }
         }
+    }else if (partnerDocument_docType === 'SingleNotice') {
+        if (partnerDocument_actionType) {
+            window.open(partnerDocument_actionType, '_blank');
+        }
+    }else if(partnerDocument_docType === 'MultipleNotice') {
+        downloadAllDoc();
     }
 }
 
 // Close when clicking outside
 window.onclick = function (e) {
-    if (!e.target.matches('.dropdown-btn')) {
-        document.getElementById("dropdownMenu").classList.remove("show");
+    const btn = e.target.closest('#notificationDropdownBtn');
+    const dropdown = document.getElementById("dropdownMenu");
+
+    if (btn) {
+        dropdown.classList.toggle("show");
     } else {
-        document.getElementById("dropdownMenu").classList.toggle("show");
+        dropdown.classList.remove("show");
     }
 }
 

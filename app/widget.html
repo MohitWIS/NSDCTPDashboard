@@ -4,132 +4,99 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="global.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="https://static.zohocdn.com/creator/widgets/version/2.0/widgetsdk-min.js"></script>
 </head>
 
 <body>
-  <div class="nsdc-container">
 
-    <!-- Header -->
-    <div class="nsdc-header">
-      <div class="header-top">
-        <div class="left">
-          <div class="logo-box"><img src="Icon/nsdc.png" style="width: 100px;"></div>
-          <div class="title">NSDC Non-Funded Portfolio</div>
-        </div>
 
-        <div class="right">
-          <button class="query-btn"
-            onclick="window.open('https://creatorapp.zohopublic.in/itzoho_nsdcindia/customer-management-account/form-perma/Raise_Ticket/6QMaRk6W5skeFrYKGq1rVfAS95uDFv1rHJEDzrrS7VP7DHmRwn8XTedJOYZhQES9NPfMnCOt7E0BTuR7VxCxqKFbn2vnYxfXhtpQ','_blank')">Raise
-            a query</button>
-          <div class="user-info">
-            <span class="assist-title">TP ID: </span><span id="tpId"></span><br>
-            <span class="assist-title">TP Name: </span><span id="tpName"></span>
-          </div>
-          <div class="icons">
-            <div class="dropdown-btn user" 
-              onclick='openCMA();'>
-              <img src="Icon/person-square.svg" alt="User">
-            </div>
-            <div>
-              <div class="dropdown">
-                <button class="dropdown-btn" id="dropdownBtn">
-                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    viewBox="0 0 16 16">
-                    <path
-                      d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6" />
-                  </svg>
-                  <span class="notificationCount" id="notification_count"></span>
-                </button>
-
-                <div class="dropdown-menu" id="dropdownMenu">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="sections-header">
-        <div class="ticker-container">
-          <div class="ticker-track" id="tickerTrack"></div>
-        </div>
-      </div>
-      
-      <a class="bottom_Desing"></a>
+<!-- ════════════════════ TOPBAR ════════════════════ -->
+<header class="topbar">
+  <div class="topbar-meta">
+    <!-- NSDC logos represented as text badge -->
+    <div style="display:flex;gap:4px;align-items:center;">
+      <div>
+		<img src="Icon/nsdc.png" />
+	  </div>
     </div>
-
-    <!-- Cards -->
-    <div class="card-grid">
-
-      <div class="card" onclick="window.open('https://support.nsdcindia.org/portal/en/newticket?departmentId=70758000000010772&layoutId=70758000000011350', '_blank')">
-        <span class="card-icon"><img src="Icon/support_agent.svg" alt="IT Support"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>IT Support</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('operationalSupportSection')">
-        <span class="card-icon"><img src="Icon/support.svg" alt="Operational Support"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Operational Support</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('socialDashboardSection')">
-        <span class="card-icon"><img src="Icon/social_leaderboard.svg" alt="Social Performance Dashboard"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Social Performance Dashboard</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('informationHubSection')">
-        <span class="card-icon"><img src="Icon/crowdsource.svg" alt="Information Hub"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Information Hub</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('noticeandGuidelineSection')">
-        <span class="card-icon"><img src="Icon/pinboard.svg" alt="Notices and Guidelines"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Notices and Guidelines</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('partnerDocumentsSection')">
-        <span class="card-icon"><img src="Icon/contract.svg" alt="Agreement / Termsheet"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Agreement / Termsheet</h3>
-      </div>
-
-      <div class="card" onclick="goToSection('partnershipRenewalSection')">
-        <span class="card-icon"><img src="Icon/partner_exchange.svg" alt="Partnership Renewal"></span>
-        <span class="tooltip"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.  </span>
-        <h3>Partnership Renewal</h3>
-      </div>
-
+    <div class="divider"></div>
+    <span class="portfolio-name">NSDC Non-Funded Portfolio</span>
+  </div>
+  <div class="topbar-right">
+    <a  class="btn-raise tooltip" href="https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149" >
+      Support Webinar
+      <span class="tooltip-text">Join the daily support webinar from 10:30 AM to 11:30 AM to get your operational queries addressed.</span>
+    </a>
+    <button class="btn-raise-query">Raise a query</button>
+    <div class="topbar-info">
+      <span>TP ID:</span> <span id="tpId"></span>
+      <br><span>TP Name:</span><span  id="tpName"></span>
     </div>
+    <div class="avatar"  onclick='openCMA();'><img src="Icon/person-square.svg" alt="User"/></div>
+    <div class="notif-dot" id="notificationDropdownBtn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="notificationCount" id="notification_count"></span>
+    </div>
+    <div class="dropdown-menu" id="dropdownMenu"></div>
+  </div>
+</header>
 
+<!-- ════════════════════ MAIN CONTENT ════════════════════ -->
+<main class="main">
+
+
+  <!-- ── LATEST ANNOUNCEMENT BANNER ── -->
+  <div class="announcement">
+    <div class="ann-icon">
+      <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:#fff;white-space:nowrap;">Latest Announcement</div>
+    <div class="ann-text ticker-container" >
+      <div class="ticker-track" id="tickerTrack"></div>
+    </div>
   </div>
 
 
-  <div id="operationalSupportSection" class="ops-section">
-
-    <!-- Header -->
-    <div class="sections-header">
-      Operational Support
+ <!-- ── SUPPORT CARDS ── -->
+  <div class="support-grid">
+    <div class="support-card" onclick="window.open('https://support.nsdcindia.org/portal/en/newticket?departmentId=70758000000010772&layoutId=70758000000011350', '_blank')">
+      <h4>IT Support</h4>
+      <p>Log technical issues related to the SIDH Portal, including login problems, system errors, and access-related concerns.</p>
     </div>
-
-
-    <!-- Button -->
-
-    <div class="ops-action">
-      <a class="btn btn-success"
-        href="https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149"
-        target="_blank">Trainer Central Webinar Link</a>
-      <button class="raise-btn"
-        onclick="window.open('https://creatorapp.zohopublic.in/itzoho_nsdcindia/customer-management-account/form-perma/Raise_Ticket/6QMaRk6W5skeFrYKGq1rVfAS95uDFv1rHJEDzrrS7VP7DHmRwn8XTedJOYZhQES9NPfMnCOt7E0BTuR7VxCxqKFbn2vnYxfXhtpQ','_blank')">Raise
-        a Query</button>
+    <div class="support-card" onclick="goToSection('operationalSupportSection')">
+      <h4>Operational Support</h4>
+      <p>Submit operational queries related to courses, sectors, certifications, billing, and other program-related processes.</p>
     </div>
+    <div class="support-card"  onclick="goToSection('socialDashboardSection')">
+      <h4>Performance Snapshot</h4>
+      <p>View your organisation’s social performance and key milestones over the past three years.</p>
+    </div>
+    <div class="support-card"  onclick="goToSection('informationHubSection')">
+      <h4>Information Hub</h4>
+      <p>Access NSDC guidelines, circulars, and reference documents.</p>
+    </div>
+    <div class="support-card"  onclick="goToSection('noticeandGuidelineSection')">
+      <h4>Notices (Access-restricted)</h4>
+      <p>View official announcements and important notices from NSDC.</p>
+    </div>
+    <div class="support-card"  onclick="goToSection('partnerDocumentsSection')">
+      <h4>Training Partner Documents</h4>
+      <p>Access key partnership documents including agreements, term sheets, certificates, invoices, and related records.</p>
+    </div>
+  </div>
 
-    <!-- Table -->
-    <div class="table-responsive">
-      <table class="custom-table">
+ <!-- ── OPERATIONAL SUPPORT TABLE ── -->
+  <section class="section operational-support-bg" id="operationalSupportSection">
+    <div class="op-header">
+      <div>
+        <h2>Operational Support</h2>
+        <p>Track your support tickets and raise new queries.</p>
+      </div>
+      <button class="btn-raise">Raise a Query</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table>
         <thead>
           <tr>
             <th>Ticket ID</th>
@@ -139,35 +106,23 @@
             <th>Current Status</th>
           </tr>
         </thead>
-        <tbody id="ticketTableBody">
-          <tr>
-            <td><a href="#">#12345</a></td>
-            <td>25 Mar 2026</td>
-            <td>Login Issue</td>
-            <td><span class="status open">Open</span></td>
-          </tr>
-          <tr>
-            <td><a href="#">#12346</a></td>
-            <td>24 Mar 2026</td>
-            <td>Payment Delay</td>
-            <td><span class="status closed">Closed</span></td>
-          </tr>
+        <tbody  id="ticketTableBody">
         </tbody>
       </table>
     </div>
+  </section>
 
-  </div>
 
-  <div id="socialDashboardSection" class="dashboard-section">
-
-    <!-- Header -->
-    <div class="sections-header">
-      Social Performance Dashboard
+  <!-- ── Performance Snapshot ── -->
+  <section class="section social-performance-bg" id="socialDashboardSection">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Performance Snapshot</div>
+        <div class="section-sub">Monitor your training and placement performance metrics.</div>
+      </div>
     </div>
-
-    <!-- Table -->
-    <div class="table-responsive">
-      <table class="custom-table">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="perf-table">
         <thead>
           <tr>
             <th>TP ID</th>
@@ -183,76 +138,84 @@
         </tbody>
       </table>
       
-        <div class="meta" style="float: right;">
+     <div class="meta" style="float: right;">
           <span>
             <img src="Icon/calendar.svg">                    
             <span id="social-modified-date"></span>
           </span>
         </div>
-    </div>
-
-  </div>
-
-  <div id="informationHubSection" class="info-section">
-
-    <!-- Header -->
-    <div class="sections-header">
-      Information Hub
-    </div>
-
-    <!-- Buttons Grid -->
-    <div class="info-grid">
-
-      <div class="info-card" id="onboarding">Onboarding SOP</div>
-      <div class="info-card" id="operational">Operational Guidelines</div>
-      <div class="info-card" id="agreement">Agreement Renewal Process</div>
-
-      <div class="info-card" id="sidh">SIDH Process Flow</div>
-      <div class="info-card" id="monitoring">Monitoring Guidelines</div>
-      <div class="info-card" id="other">Other Document</div>
 
     </div>
+  </section>
 
-  </div>
-
-  <div id="noticeandGuidelineSection" class="dashboard-section">
-
-    <!-- Header -->
-
-    <div class="header" style="display: flex;">
+  <!-- ── INFORMATION HUB ── -->
+  <section class="section information-hub-bg" id="informationHubSection">
+    <div class="section-header">
       <div>
-        <h2>Notices & Guidelines</h2>
-        <p>Stay informed with the latest updates and training partner requirements</p>
+        <div class="section-title">Information Hub</div>
+        <div class="section-sub">Quick access to standard operating procedures and guidelines.</div>
       </div>
-      <button class="btn btn-primary" onclick="downloadAllDoc()"> <img src="Icon/download_white.svg" alt="Download" />
-        Export All</button>
     </div>
-
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('notices')">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-          viewBox="0 0 16 16">
-          <path
-            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6" />
-        </svg>
-        Notices
-        <!-- <span>1</span> -->
-      </button>
-      <button class="tab" onclick="showTab('guidelines')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon"
-          viewBox="0 0 16 16">
-          <path
-            d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783" />
-        </svg>
-        Guidelines
-      </button>
+    <div class="hub-grid">
+      <div class="hub-item" id="onboarding">
+        <div class="hub-icon blue">
+          <svg width="16" height="16" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="hub-label">Onboarding SOP</span>
+      </div>
+      <div class="hub-item" id="operational">
+        <div class="hub-icon green">
+          <svg width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <span class="hub-label">Operational Guidelines</span>
+      </div>
+      <div class="hub-item" id="agreement">
+        <div class="hub-icon teal">
+          <svg width="16" height="16" fill="none" stroke="#0d9488" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <span class="hub-label">Agreement Renewal Process</span>
+      </div>
+      <div class="hub-item" id="sidh">
+        <div class="hub-icon purple">
+          <svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <span class="hub-label">SIDH Process Flow</span>
+      </div>
+      <div class="hub-item" id="monitoring">
+        <div class="hub-icon cyan">
+          <svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="hub-label">Monitoring Guidelines</span>
+      </div>
+      <div class="hub-item" id="other">
+        <div class="hub-icon gray">
+          <svg width="16" height="16" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        <span class="hub-label">Other Document</span>
+      </div>
     </div>
+  </section>
 
-    <!-- Notices Section -->
-    <div id="notices-section" class="notices-section">
-      <div class="toolbar">
-        <input type="text" placeholder="Search notices..." id="noticeSearchInput" onchange="filterNoticeList()" />
-        <select onchange="onCategoryChange(this.value)">
+
+  <!-- ── NOTICES & GUIDELINES ── -->
+  <section class="section notices-guideline-bg" id="noticeandGuidelineSection">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Notices</div>
+        <div class="section-sub">Stay informed with the latest updates and training partner requirements.</div>
+      </div>
+      <div class="link-btn" onclick="noticeDocumentAction('MultipleNotice', null)">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export All
+      </div>
+    </div>
+    <div class="card">
+      <div class="notices-tabs">
+        <div class="ntab active">NOTICES</div>
+      </div>
+      <div class="notice-search">
+        <input type="text" placeholder="Search notices…"  id="noticeSearchInput" onchange="filterNoticeList()"  />
+         <select onchange="onCategoryChange(this.value)">
           <option value="">All Categories</option>
           <option value="Operational">Operational</option>
           <option value="Technical">Technical</option>
@@ -260,121 +223,96 @@
         </select>
       </div>
 
-      <ul id="noticeList">
-      </ul>
-
+      <div id="noticeList" class="noticeListStyle">
+        </div>
     </div>
+  </section>
 
-    <!-- Guidelines Section -->
-    <div id="guidelines-section" style="display: none;">
-      <div class="toolbar">
-        <input type="text" placeholder="Search guidelines..." id="guidelineSearchInput" />
-        <select onchange="onGuidelineCategoryChange(this.value)">
-          <option value="">All Categories</option>
-          <option value="Operational">Operational</option>
-          <option value="General">General</option>
-          <option value="Financial">Financial</option>
-        </select>
+ 
+  <!-- ── PARTNER DOCUMENTS ── -->
+  <section class="section partner-doc-bg" id="partnerDocumentsSection" >
+    <div class="section-header">
+      <div>
+        <div class="section-title">Partner Documents</div>
+        <div class="section-sub">Manage and access your official partnership documentation.</div>
       </div>
-
-      <div id="guidelineCardContainer" class="grid">
-      </div>
+      <!-- <div class="link-btn">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download All
+      </div> -->
     </div>
-  </div>
+    <div class="doc-grid">
 
-
-  <div id="partnerDocumentsSection" class="dashboard-section">
-    <div class="container">
-      <!-- Section Title -->
-      <div class="header">
-        <h2>Partner Documents</h2>
-      </div>
-
-      <!-- Cards Grid -->
-      <div class="grid">
-
-        <!-- Card 1 -->
-        <div class="doc-card">
-          <div class="doc-header">
-            <div class="file-icon bg-lightblue">
-              <img src="Icon/file_Blue.svg" />
-            </div>
-            <div>
-              <h3>Partnership Certificate</h3>
-              <p>Official partnership certification document</p>
-            </div>
-          </div>
-
-          <div class="doc-footer">
-
-            <div class="actions">
-              <button class="btn-outline" id="viewBtn" onclick="partnerDocumentAction('Partnership-Certificate', 'viewBtn')">👁 View</button>
-              <button class="btn-dark" id="downloadBtn" onclick="partnerDocumentAction('Partnership-Certificate', 'downloadBtn')"><img src="Icon/download_white.svg" alt="Download">
-                Download</button>
-            </div>
+      <div class="doc-card">
+        <div class="doc-icon">
+          <svg width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+        </div>
+        <div class="doc-name">Partnership Certificate</div>
+        <div class="doc-desc">Official partnership certification document</div>
+        <div class="doc-footer">
+          <div class="doc-date">SIGNED ON<br/><strong>09 Apr 2026</strong></div>
+          <div class="doc-actions">
+            <button title="View" onclick="partnerDocumentAction('Partnership-Certificate', 'viewBtn')">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button title="Download" onclick="partnerDocumentAction('Partnership-Certificate', 'downloadBtn')">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
           </div>
         </div>
+      </div>
 
-        <!-- Card 2 -->
-        <div class="doc-card">
-          <div class="doc-header">
-            <div class="file-icon bg-lightblue">
-              <img src="Icon/file_Blue.svg" />
-            </div>
-            <div>
-              <h3>Agreement Document</h3>
-              <p>Partnership terms and conditions</p>
-            </div>
-          </div>
-
-          <div class="doc-footer">
-
-            <div class="actions">
-              <button class="btn-outline" id="viewBtnAgre" onclick="partnerDocumentAction('Agreement-Document', 'viewBtnAgre')">👁 View</button>
-              <button class="btn-dark" id="downloadBtnAgre" onclick="partnerDocumentAction('Agreement-Document', 'downloadBtnAgre')"><img src="Icon/download_white.svg" alt="Download">
-                Download</button>
-            </div>
+      <div class="doc-card">
+        <div class="doc-icon" style="background:#f0fdf4;">
+          <svg width="18" height="18" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+        </div>
+        <div class="doc-name">Agreement Document</div>
+        <div class="doc-desc">Partnership terms and conditions</div>
+        <div class="doc-footer">
+          <div class="doc-date">SIGNED ON<br/><strong>08 Apr 2026</strong></div>
+          <div class="doc-actions">
+            <button onclick="partnerDocumentAction('Agreement-Document', 'viewBtnAgre')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button onclick="partnerDocumentAction('Agreement-Document', 'downloadBtnAgre')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
           </div>
         </div>
+      </div>
 
-        <!-- Card 3 -->
-        <div class="doc-card">
-          <div class="doc-header">
-            <div class="file-icon bg-lightblue">
-              <img src="Icon/file_Blue.svg" />
-            </div>
-            <div>
-              <h3>Term-sheet</h3>
-              <p>Financial terms and obligations</p>
-            </div>
-          </div>
-
-          <div class="doc-footer">
-
-            <div class="actions">
-              <button class="btn-outline" id="Term_Sheet_URL1" onclick="partnerDocumentAction('Term-sheet', 'Term_Sheet_URL1')">👁 View</button>
-              <button class="btn-dark" id="downloadTerm_Sheet_URL1" onclick="partnerDocumentAction('Term-sheet', 'downloadTerm_Sheet_URL1')"><img src="Icon/download_white.svg" alt="Download">
-                Download</button>
-            </div>
+      <div class="doc-card">
+        <div class="doc-icon" style="background:#fef3c7;">
+          <svg width="18" height="18" fill="none" stroke="#d97706" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+        </div>
+        <div class="doc-name">Term-sheet</div>
+        <div class="doc-desc">Financial terms and obligations</div>
+        <div class="doc-footer">
+          <div class="doc-date">UPLOADED ON<br/><strong>08 Apr 2026</strong></div>
+          <div class="doc-actions">
+            <button onclick="partnerDocumentAction('Term-sheet', 'Term_Sheet_URL1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button onclick="partnerDocumentAction('Term-sheet', 'downloadTerm_Sheet_URL1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
           </div>
         </div>
-
       </div>
 
     </div>
-  </div>
+  </section>
 
 
-  <div class="container">
-    <div class="header">
-      <h2>Quarterly Invoices</h2>
-      <a href="#">All invoices by quarter</a>
+  <!-- ── QUARTERLY INVOICES ── -->
+  <section class="section quarterly-invoice-bg">
+    <div class="invoices-header">
+      <div>
+        <div class="section-title">Quarterly Invoices</div>
+        <div class="section-sub">Track your financial obligations and payment history.</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+        <!-- <button class="btn-outline">Filter</button> -->
+        <button class="btn-raise">Raise Dispute</button>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="custom-table">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="qtr-Invoice-table">
         <thead>
           <tr>
-            <th>Quarter</th>
+             <th>Quarter</th>
             <th>Invoice Number</th>
             <th>Due Date</th>
             <th>UTR Number</th>
@@ -385,77 +323,90 @@
             <th>Action</th>
           </tr>
         </thead>
-
         <tbody id="invoiceTableBody">
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 
 
-  <div class="container" id="partnershipRenewalSection">
-
-    <div class="sections-header">Partnership Renewal</div>
-
-    <div class="doc-card">
-
-      <!-- Top -->
-      <div class="top-row">
-        <div>
-          <div class="title" style="margin: unset;">Partnership Certificate Renewal</div>
-          <div class="subtitle">Manage your partnership renewal process</div>
-        </div>
-        <div class="badge">Approved</div>
+  <!-- ── PARTNERSHIP RENEWAL ── -->
+  <section class="section partnership-renewal-bg" id="partnershipRenewalSection">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Partnership Renewal</div>
+        <div class="section-sub">Manage your partnership renewal process and requirements.</div>
       </div>
-
-      <!-- Assistance -->
-      <div class="assist">
-        <div class="assist-title">Need Assistance?</div>
-        <div class="assist-row">
-          <div class="assist-text">
-            Raising a query is optional. You can proceed with renewal without submitting queries.
+    </div>
+    <div class="card">
+      <div class="renewal-inner">
+        <div class="renewal-assist">
+          <div>
+            <h4>Need Assistance?</h4>
+            <p>Raising a query is optional. You can proceed with renewal without submitting queries.</p>
           </div>
           <button class="btn-outline need-help-btn"
             onclick="window.open('https://creatorapp.zohopublic.in/itzoho_nsdcindia/customer-management-account/form-perma/Raise_Ticket/6QMaRk6W5skeFrYKGq1rVfAS95uDFv1rHJEDzrrS7VP7DHmRwn8XTedJOYZhQES9NPfMnCOt7E0BTuR7VxCxqKFbn2vnYxfXhtpQ?Issue_Category=Partnership%20Renewal','_blank')"><img
               src="Icon/chat-left.svg" alt="Raise Query" /> Raise Query</button>
         </div>
-      </div>
-
-      <!-- Success -->
-      <div class="success-box">
-        <strong>✔ Partnership Renewal Approved</strong>
-        All checklist items have been completed. Please proceed with payment to complete the renewal process.
-      </div>
-
-      <!-- Payment -->
-      <div class="payment">
-        <div class="payment-title">Payment</div>
-
-        <div class="payment-card">
-          <div class="payment-info">
-            <strong>Renewal Fee</strong>
-            <span>Complete payment to activate your certificate</span>
+        <div class="renewal-approved">
+		<div class="check-circle-container">
+          <div class="check-circle">
+            <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <button onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'
-            class="btn btn-primary"><img src="Icon/credit-card_white.svg" alt="Credit Card" /> Pay Now</button>
+		  </div>
+          <div>
+            <h4>Partnership Renewal Approved</h4>
+            <p>All checklist items have been completed. Please proceed with payment to complete the renewal process.</p>
+          </div>
+        </div>
+        <div class="payment-details">
+          <h4>Payment Details</h4>
+          <div class="fee-row">
+            <div>
+              <h5>Renewal Fee</h5>
+              <p>Complete payment to activate your certificate for the next term.</p>
+            </div>
+            <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
+          </div>
         </div>
       </div>
-
     </div>
+  </section>
 
-  </div>
 
-  <div id="passwordModal" class="modal">
+
+</main>
+
+ <div id="passwordModal" class="modal">
     <div class="modal-content">
       <h3>Enter Password</h3>
       <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" />
       <div class="actions">
         <button class="btn btn-success" onclick="checkPassword()">Submit</button>
-        <button class="raise-btn" onclick="closePopup()">Cancel</button>
+        <button class="btn btn-primary" onclick="closePopup()">Cancel</button>
       </div>
       <p id="errorMsg"></p>
     </div>
   </div>
+
+
+    <!-- Button -->
+
+    <!-- <div class="ops-action">
+      <a class="btn btn-success"
+        href="https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149"
+        target="_blank">Trainer Central Webinar Link</a>
+      <button class="raise-btn"
+        onclick="window.open('https://creatorapp.zohopublic.in/itzoho_nsdcindia/customer-management-account/form-perma/Raise_Ticket/6QMaRk6W5skeFrYKGq1rVfAS95uDFv1rHJEDzrrS7VP7DHmRwn8XTedJOYZhQES9NPfMnCOt7E0BTuR7VxCxqKFbn2vnYxfXhtpQ','_blank')">Raise
+        a Query</button>
+    </div> -->
+
+
+
+
+
+ 
 
   <script type="text/javascript" src="widget.js"></script>
 </body>
