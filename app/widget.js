@@ -12,6 +12,7 @@ var Agreement_Document_certLink;
 var Term_Sheet_Document_certLink;
 var Tp_ID = "";
 var Tp_Name="";
+let All_Mlp_Data_ID = "";
 
 document.getElementById("noticeSearchInput").addEventListener("input", function () {
     clearTimeout(debounceTimer);
@@ -187,9 +188,147 @@ function getOtherDocs(tpId) {
         console.log(latestRecord);
         Agreement_Document_certLink = latestRecord.Agreement_URL1;
         Term_Sheet_Document_certLink = latestRecord.Term_Sheet_URL1;
+        if(!Agreement_Document_certLink){
+            document.getElementById("Agreement_Document_Container").style.display = "none";
+        }
+        if(!Term_Sheet_Document_certLink){
+            document.getElementById("Term_sheet_Container").style.display = "none";
+        }
+       
     });
 }
 
+function submitUTRAndReceipt(){
+
+     const button = document.getElementById("paymentRenewalSubmitBtn");
+    const mode = button.getAttribute("data-mode");
+
+    if (mode === "view") {
+        // Switch to edit mode
+        setFormMode(true);
+        return;
+    }
+
+    const utrNumber = document.getElementById("UTR_Number_Payment").value;
+    const fileInput = document.getElementById("file_Payment");
+    const file = (fileInput) ? fileInput.files[0] : null;
+
+    console.log("UTR Number:", utrNumber);
+    console.log("Selected File:", file);
+
+    if (!utrNumber) {
+        alert("Please enter UTR Number");
+        return;
+    }
+
+    if(!All_Mlp_Data_ID){
+        alert("Record not found. Please try again later.");
+        return;
+    }
+
+     const config = {
+        app_name: "customer-management-account",
+        report_name: "All_Mlp_Data",
+        id: All_Mlp_Data_ID,
+            payload: {
+                data: {
+                    UTR_Number_Partnership_renewal: utrNumber
+                }
+            }
+    };
+
+     ZOHO.CREATOR.DATA.updateRecordById(config).then(function (response) {
+
+        if (response.code == 3000) {
+            console.log(response);
+            if(!file){
+            getPartnerDocuments(Tp_ID);
+            alert("Data Updated Successfully");
+            }
+        } 
+
+        // Step 2: Upload File (if exists)
+        if (file) {
+            const fileConfig = {
+                app_name: "customer-management-account",
+                report_name: "All_Mlp_Data",
+                id : All_Mlp_Data_ID,
+                field_name : "Payment_Receipt1",
+                file : file
+            };
+            ZOHO.CREATOR.FILE.uploadFile(fileConfig).then(function (responseFile) {
+                console.log(responseFile);
+                if(responseFile.code == 3000){
+                    getPartnerDocuments(Tp_ID);
+                    alert("Data Updated Successfully");
+                }
+            });
+        }
+
+        
+        });
+}
+
+function setFormMode(isEdit) {
+    const utrInput = document.getElementById("UTR_Number_Payment");
+    const fileContainer = document.getElementById("fileUploadReceipt");
+    const button = document.getElementById("paymentRenewalSubmitBtn");
+
+    if (isEdit) {
+        // Enable fields
+        utrInput.removeAttribute("readonly");
+
+        // Replace link with file input if exists
+        const existingLink = fileContainer.querySelector("a");
+        if (existingLink) {
+            fileContainer.innerHTML = `
+                <label for="file_Payment">Upload Receipt</label>
+                <input type="file" id="file_Payment"/>
+            `;
+        }
+
+        button.innerText = "Update";
+        button.setAttribute("data-mode", "edit");
+
+    } else {
+        // Disable fields
+        utrInput.setAttribute("readonly", true);
+
+        button.innerText = "Edit";
+        button.setAttribute("data-mode", "view");
+    }
+}
+
+
+function setInvoiceFormMode(isEdit) {
+    const utrInput = document.getElementById("UTR_Number_Payment");
+    const fileContainer = document.getElementById("fileUploadReceipt");
+    const button = document.getElementById("paymentRenewalSubmitBtn");
+
+    if (isEdit) {
+        // Enable fields
+        utrInput.removeAttribute("readonly");
+
+        // Replace link with file input if exists
+        const existingLink = fileContainer.querySelector("a");
+        if (existingLink) {
+            fileContainer.innerHTML = `
+                <label for="file_Payment">Upload Receipt</label>
+                <input type="file" id="file_Payment"/>
+            `;
+        }
+
+        button.innerText = "Update";
+        button.setAttribute("data-mode", "edit");
+
+    } else {
+        // Disable fields
+        utrInput.setAttribute("readonly", true);
+
+        button.innerText = "Edit";
+        button.setAttribute("data-mode", "view");
+    }
+}
 
 function getPartnerDocuments(tpId) {
     const config = {
@@ -206,7 +345,31 @@ function getPartnerDocuments(tpId) {
         const latestRecord = data[data.length - 1];
         //console.log(latestRecord);
         partnerDocument_certLink = latestRecord.Certificate_Link;
+        if(!partnerDocument_certLink){
+            document.getElementById("Partnership_Certificate_Container").style.display = "none";
+        }
 
+        
+        All_Mlp_Data_ID = latestRecord.ID;
+
+        if(latestRecord.UTR_Number_Partnership_renewal || latestRecord.Payment_Receipt1){
+            //set readonly mode
+            setFormMode(false);
+        }
+
+        if(latestRecord.UTR_Number_Partnership_renewal){
+            document.getElementById("UTR_Number_Payment").value = latestRecord.UTR_Number_Partnership_renewal;
+        }
+        if(latestRecord.Payment_Receipt1){
+              // Extract file name from URL
+                let fileName = latestRecord.Payment_Receipt1.split("filepath=")[1] || "Download File";
+
+                // Optional: decode URL (in case of spaces or special chars)
+                fileName = decodeURIComponent(fileName);
+            document.getElementById("fileUploadReceipt").innerHTML = `<label for="file_Payment">Uploaded Receipt</label><a href="${latestRecord.Payment_Receipt1}" target="_blank" id="file_Payment" class="view-link">${fileName}</a>`;
+        }else{
+            document.getElementById("fileUploadReceipt").innerHTML = `<label for="file_Payment">Upload Receipt</label><input type="file" id="file_Payment"/>`;
+        }
 
 
         console.log(data);
@@ -235,23 +398,24 @@ function getPartnerDocuments(tpId) {
                 fileName = decodeURIComponent(fileName);
 
                 paymentReceiptHtml = `
-                <a href="${item.Payment_Receipt}" target="_blank" class="view-link">${fileName}</a>
+                <a href="${item.Payment_Receipt}" target="_blank" class="view-link" id="queryInvoicefile_${item.ID}">${fileName}</a>
                 `;
             } else {
                 paymentReceiptHtml = `
-                    <input type="file" id="file_${item.ID}" />
+                    <input type="file" id="queryInvoicefile_${item.ID}" />
                 `;
             }
 
+            let hasRowData = item.UTR_Number || item.Payment_Receipt;
             html+=`
             <tr>
                 <td>${quarter}</td>
                 <td style="color:var(--gray-500);">-</td>
                 <td>${dueDate}</td>
                 <td data-label="UTR Number">
-                    <input type="text" id="utr_${item.ID}" class="form-control" value="${item.UTR_Number || ''}" />
+                    <input type="text" id="utr_${item.ID}" class="form-control" value="${item.UTR_Number || ''}" ${hasRowData ? 'readonly' : ''} />
                 </td>
-                 <td data-label="Payment Receipt">
+                 <td data-label="Payment Receipt" id="fileContainer_${item.ID}">
                     ${paymentReceiptHtml}
                 </td>
                 <td><span class="badge badge-${statusClass}">${status}</span></td>
@@ -262,7 +426,7 @@ function getPartnerDocuments(tpId) {
                     <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
                 </td>
                 <td>
-                    <button class="btn btn-primary" onclick='submitQueryInvoiceDetails("${item.ID}")'>Submit</button>
+                    <button class="btn btn-primary"  id="btn_${item.ID}" onclick='submitQueryInvoiceDetails("${item.ID}")' data-mode="${hasRowData ? 'view' : 'edit'}" >${hasRowData ? 'Edit' : 'Submit'}</button>
                 </td>
             </tr>
             `;
@@ -280,14 +444,52 @@ function getPartnerDocuments(tpId) {
     });
 }
 
+function enableRowEdit(id,isEdit) {
+    const utrInput = document.getElementById(`utr_${id}`);
+    const fileContainer = document.getElementById(`fileContainer_${id}`);
+    const button = document.getElementById(`btn_${id}`);
+
+    if(isEdit){
+        // Enable UTR field
+        utrInput.removeAttribute("readonly");
+
+        // Replace file link with input
+        const existingLink = fileContainer.querySelector("a");
+        if (existingLink) {
+            fileContainer.innerHTML = `
+                <input type="file" id="queryInvoicefile_${id}" />
+            `;
+        }
+
+        button.innerText = "Update";
+        button.setAttribute("data-mode", "edit");
+    } else {
+        // Disable fields
+        utrInput.setAttribute("readonly", true);
+
+        button.innerText = "Edit";
+        button.setAttribute("data-mode", "view");
+    }
+}
+
 async function submitQueryInvoiceDetails(recordId) {
 
     try {
+
+        const button = document.getElementById(`btn_${recordId}`);
+        const mode = button.getAttribute("data-mode");
+
+        if (mode === "view") {
+            enableRowEdit(recordId,true);
+            return;
+        }else{
+            enableRowEdit(recordId,false);
+        }
         // Get UTR value
         const utrValue = document.getElementById(`utr_${recordId}`).value;
 
         // Get file
-        const fileInput = document.getElementById(`file_${recordId}`);
+        const fileInput = document.getElementById(`queryInvoicefile_${recordId}`);
         const file = (fileInput) ? fileInput.files[0] : null;
 
         if (!utrValue) {
@@ -309,23 +511,29 @@ async function submitQueryInvoiceDetails(recordId) {
         ZOHO.CREATOR.DATA.updateRecordById(config).then(function (response) {
         if (response.code == 3000) {
             console.log(response);
+             if(!file){
+                getPartnerDocuments(Tp_ID);
+                alert("Record updated successfully!");
+            }
+
+            // Step 2: Upload File (if exists)
+            if (file) {
+                const fileConfig = {
+                    app_name: "customer-management-account",
+                    report_name: "All_Mlp_Data",
+                    id : recordId,
+                    field_name : "Payment_Receipt",
+                    file : file
+                };
+                ZOHO.CREATOR.FILE.uploadFile(fileConfig).then(function (response) {
+                    console.log(response);                
+                    getPartnerDocuments(Tp_ID);
+                    alert("Record updated successfully!");
+                });
+            }
         } });
 
-        // Step 2: Upload File (if exists)
-        if (file) {
-            const fileConfig = {
-                app_name: "customer-management-account",
-                report_name: "All_Mlp_Data",
-                id : recordId,
-                field_name : "Payment_Receipt",
-                file : file
-            };
-            ZOHO.CREATOR.FILE.uploadFile(fileConfig).then(function (response) {
-                console.log(response);
-            });
-        }
-
-        alert("Record updated successfully!");
+        
 
     } catch (error) {
         console.error(error);

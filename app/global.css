@@ -605,11 +605,31 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
+input[readonly] {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    pointer-events: none; /* optional: disables cursor */
+}
 
 #errorMsg {
   color: red;
 }
+.btn-group {
+    justify-content: flex-end;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
 
+.form-group label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #555;
+}
 /* Bootstrap-like input */
 .form-control {
     margin: 10px 0px;
@@ -751,4 +771,8 @@
 .tooltip:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
+}
+
+#partnershipRenewalSection{
+  margin: 20px 0px 0px 0px !important;
 }
