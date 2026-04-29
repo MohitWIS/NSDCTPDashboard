@@ -13,6 +13,14 @@ var Term_Sheet_Document_certLink;
 var Tp_ID = "";
 var Tp_Name="";
 let All_Mlp_Data_ID = "";
+let loginUserEmail = "";
+
+
+// Run on page load
+toggleButtonByIST();
+
+// Optional: recheck every minute
+setInterval(toggleButtonByIST, 60000);
 
 document.getElementById("noticeSearchInput").addEventListener("input", function () {
     clearTimeout(debounceTimer);
@@ -48,7 +56,7 @@ ZOHO.CREATOR.UTIL.getInitParams().then(function (response) {
     if (response.envUrlFragment != "/environment/development") {
         getuserDetails(response.loginUser);
     } else {
-        IsDevelopment = true;
+        IsDevelopment = true;        
         getuserDetails("wlplnsdc@gmail.com");
     }
 
@@ -64,6 +72,7 @@ function openCMA() {
 }
 
 function getuserDetails(tpid) {
+    loginUserEmail = tpid;
     var config1 = {
         app_name: "customer-management-account",
         report_name: "Copy_of_CMA_Report",
@@ -412,18 +421,18 @@ function getPartnerDocuments(tpId) {
                 <td>${quarter}</td>
                 <td style="color:var(--gray-500);">-</td>
                 <td>${dueDate}</td>
+                <td><span class="badge badge-${statusClass}">${status}</span></td>
+                <td class="view-link" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
+                    <img src="Icon/download_grey.svg"> Download
+                </td>                
+                 <td>
+                    <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
+                </td>
                 <td data-label="UTR Number">
                     <input type="text" id="utr_${item.ID}" class="form-control" value="${item.UTR_Number || ''}" ${hasRowData ? 'readonly' : ''} />
                 </td>
                  <td data-label="Payment Receipt" id="fileContainer_${item.ID}">
                     ${paymentReceiptHtml}
-                </td>
-                <td><span class="badge badge-${statusClass}">${status}</span></td>
-                <td class="view-link" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
-                    <img src="Icon/download_grey.svg"> Download
-                </td>
-                 <td>
-                    <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
                 </td>
                 <td>
                     <button class="btn btn-primary"  id="btn_${item.ID}" onclick='submitQueryInvoiceDetails("${item.ID}")' data-mode="${hasRowData ? 'view' : 'edit'}" >${hasRowData ? 'Edit' : 'Submit'}</button>
@@ -889,13 +898,13 @@ function getOperationalSupport(tpId) {
     var config1 = {
         app_name: "customer-management-account",
         report_name: "Zoho_Desk_Report",
-        //criteria: "TP_SPOC_Email_ID_for_regular_communication == " + tpid
-        //criteria: "(TP_SPOC_Email_ID_for_regular_communication == \"" + tpid + "\")"
+        criteria: "(Training_Partner_ID == \"" + tpId + "\")"
     };
     //console.log(config1);
     const tId = tpId;
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
         var data = res.data;
+        console.log(data);
         var html = "";
         data.forEach(item => {
             //console.log(item["Record_ID.Training_Partner_ID"]?.TP_ID);
@@ -905,14 +914,12 @@ function getOperationalSupport(tpId) {
                 var ticketId = item.Ticket_ID || "-";
                 var createdOn = item.Date_field || "-";
                 var subject = item.subject_1 || "-";
-                var response = item.Response || "-";
                 var status = item.Status || "-";
                 html += `
                 <tr>
                     <td><span class="view-link">#${ticketId}</span></td>
                     <td>${formatDate(createdOn)}</td>
                     <td>${subject}</td>
-                    <td>${response}</td>
                     <td><span class="badge badge-${status}">${status}</span></td>
                 </tr>
                 `;
@@ -1116,24 +1123,124 @@ function noticeDocumentAction(docType, actionType) {
     openPopup();
 }
 
+
+// ===================== Start of OTP Popup & Validation =====================
+
+
+let retryTimer;
+let timeLeft = 30;
+
 function openPopup() {
     document.getElementById("passwordModal").style.display = "flex";
+    sendOTPToEmail();
 }
 
 function closePopup() {
     document.getElementById("passwordModal").style.display = "none";
+    retryPassword(); // Reset retry state
+    clearInterval(retryTimer);
+}
+
+function sendOTPToEmail() {
+    if(loginUserEmail){   
+        startRetryTimer(); // Start the retry timer when OTP is sent
+        const config = {
+            api_name: "sendOtpToEmail",
+            workspace_name: "itzoho_nsdcindia",
+            http_method: "POST",
+            content_type: "application/json",
+            public_key:"rgp2PVCDusu6Qjt3XJ8QDAyuX",
+            payload: {
+                email: loginUserEmail
+            }
+        };
+        ZOHO.CREATOR.DATA.invokeCustomApi(config).then(function (response) {
+            console.log(response)
+                if (response.code === 3000) {
+                    alert("OTP sent to your registered email. Please check and enter the OTP to proceed.");
+                }else{
+                    alert("Failed to send OTP. Please try again later.");
+                }
+        }).catch(function (error) {
+            console.error("Error sending OTP:", error);
+            alert("Failed to send OTP. Please try again later.");
+        });
+    } else {
+        alert("Unable to fetch your email. Please contact support.");
+    }                                                                   
+}
+
+function startRetryTimer() {
+    const timerMsg = document.getElementById("timerMsg");
+    const retryBtn = document.getElementById("retryBtn");
+
+    // Reset UI
+    timeLeft = 30;
+    retryBtn.style.display = "none";
+    timerMsg.innerText = `Retry available in ${timeLeft}s`;
+
+    // Clear old timer if already running
+    clearInterval(retryTimer);
+
+    retryTimer = setInterval(() => {
+        timeLeft--;
+
+        if (timeLeft > 0) {
+            timerMsg.innerText = `Retry available in ${timeLeft}s`;
+        } else {
+            clearInterval(retryTimer);
+            timerMsg.innerText = "";
+            retryBtn.style.display = "inline-block";
+        }
+    }, 1000);
+}
+
+function retryPassword() {
+    document.getElementById("passwordInput").value = "";
+    document.getElementById("errorMsg").innerText = "";
+    document.getElementById("timerMsg").innerText = "";
+    document.getElementById("retryBtn").style.display = "none";
 }
 
 function checkPassword() {
-    const input = document.getElementById("passwordInput").value;
-    if (input ===  Tp_Name.substring(0, 4) + Tp_ID.substring(0, 4)) { 
-        closePopup();
-        performActionOnDocument();
-    } else {
-        const error = document.getElementById("errorMsg");
-        error.textContent = "Wrong password!";
-    }
+     var config1 = {
+        app_name: "customer-management-account",
+        report_name: "All_Otp_Verifications",
+        criteria: "(TP_Email == \"" + loginUserEmail + "\")"
+    };
+    ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
+        var data = res.data;
+        const input = document.getElementById("passwordInput").value;
+        if (data.length > 0) {
+            const record = data[0];
+            const otp = record.OTP_Code || "";
+            const expiry = record.Expiration_Date_Time || "";
+            const now = new Date();
+            const expiryDate = new Date(expiry);
+            if (input === otp && now <= expiryDate) {
+                closePopup();
+                performActionOnDocument();
+            } else {
+                const error = document.getElementById("errorMsg");
+                error.textContent = "Wrong OTP or OTP expired!";
+                startRetryTimer();
+            }
+        }
+    });
+
+
+
+    // const input = document.getElementById("passwordInput").value;
+    // if (input ===  Tp_Name.substring(0, 4) + Tp_ID.substring(0, 4)) { 
+    //     closePopup();
+    //     performActionOnDocument();
+    // } else {
+    //     const error = document.getElementById("errorMsg");
+    //     error.textContent = "Wrong password!";
+    // }
 }
+
+// ===================== End of OTP Popup & Validation =====================
 
 function performActionOnDocument() {
     if (partnerDocument_docType === 'Partnership-Certificate') {
@@ -1179,6 +1286,34 @@ function performActionOnDocument() {
         downloadAllDoc();
     }
 }
+
+function toggleButtonByIST() {
+    const button = document.getElementById("supportWebinarBtn");
+
+    // Get current time in IST
+    const now = new Date();
+    const istTime = new Date(
+        now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    );
+
+    const hours = istTime.getHours();
+    const minutes = istTime.getMinutes();
+
+    // Convert current time to total minutes
+    const currentMinutes = hours * 60 + minutes;
+
+    // 10:30 AM = 630 mins
+    // 11:30 AM = 690 mins
+    const startTime = 10 * 60 + 30;
+    const endTime = 11 * 60 + 30;
+
+    if (currentMinutes >= startTime && currentMinutes <= endTime) {
+        button.disabled = false;
+    } else {
+        button.disabled = true;
+    }
+}
+
 
 // Close when clicking outside
 window.onclick = function (e) {

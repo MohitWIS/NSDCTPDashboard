@@ -24,10 +24,10 @@
     <span class="portfolio-name">NSDC Non-Funded Portfolio</span>
   </div>
   <div class="topbar-right">
-    <a  class="btn-raise tooltip" href="https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149" >
+    <button id="supportWebinarBtn" class="btn-raise tooltip" onclick="window.open('https://nsdc-academy-portal.trainercentralsite.in/session/nsdc-academy-live-q-a-webinar-morning-2751607149', '_blank')">
       Support Webinar
       <span class="tooltip-text">Join the daily support webinar from 10:30 AM to 11:30 AM to get your operational queries addressed.</span>
-    </a>
+    </button>
     <button class="btn-raise-query" onclick="window.open('https://creatorapp.zoho.in/itzoho_nsdcindia/customer-management-account/#Form:Raise_Ticket', '_blank')">Raise a query</button>
     <div class="topbar-info">
       <span>TP ID:</span> <span id="tpId"></span>
@@ -77,7 +77,7 @@
       <p>Access NSDC guidelines, circulars, and reference documents.</p>
     </div>
     <div class="support-card"  onclick="goToSection('noticeandGuidelineSection')">
-      <h4>Notices (Access-restricted)</h4>
+      <h4>Notices</h4>
       <p>View official announcements and important notices from NSDC.</p>
     </div>
     <div class="support-card"  onclick="goToSection('partnerDocumentsSection')">
@@ -102,7 +102,6 @@
             <th>Ticket ID</th>
             <th>Created On</th>
             <th>Subject</th>
-            <th>Response</th>
             <th>Current Status</th>
           </tr>
         </thead>
@@ -363,7 +362,7 @@
       </div>
       <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
         <!-- <button class="btn-outline">Filter</button> -->
-        <button class="btn-raise">Raise Query</button>
+        <!-- <button class="btn-raise">Raise Query</button> -->
       </div>
     </div>
     <div class="card" style="padding:0;overflow:hidden;">
@@ -373,11 +372,11 @@
              <th>Quarter</th>
             <th>Invoice Number</th>
             <th>Due Date</th>
-            <th>UTR Number</th>
-            <th>Payment Receipt</th>
             <th>Status</th>
             <th>Download Invoice</th>
             <th>Payment</th>
+            <th>UTR Number</th>
+            <th>Payment Receipt</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -399,8 +398,10 @@
       <div class="actions">
         <button class="btn btn-success" onclick="checkPassword()">Submit</button>
         <button class="btn btn-primary" onclick="closePopup()">Cancel</button>
+        <button class="btn btn-warning" id="retryBtn" onclick="sendOTPToEmail()" style="display:none;">Resend OTP</button>
       </div>
       <p id="errorMsg"></p>
+      <p id="timerMsg"></p>
     </div>
   </div>
 

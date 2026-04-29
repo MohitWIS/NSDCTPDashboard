@@ -31,6 +31,19 @@
     min-height: 100vh;
   }
 
+  button:disabled {
+    background: #d3d3d3;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  button:disabled:hover {
+      background: #d3d3d3;
+      transform: none;
+  }
+
   /* ── TOPBAR ────────────────────────────────── */
   .topbar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -617,6 +630,11 @@ input[readonly] {
 #errorMsg {
   color: red;
 }
+#timerMsg{
+    color: #555;
+    float: right;
+    font-size: small;
+}
 .btn-group {
     justify-content: flex-end;
 }
@@ -711,12 +729,19 @@ input[readonly] {
 }
 
 .btn-success {
-    color: #444445;
     background: linear-gradient(135deg, #aec90a, #51B748);
 }
 
 .btn-success:hover {
     background: linear-gradient(135deg, #51B748, #aec90a);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #c0c1bf, #818281);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #818281, #c0c1bf);
 }
 
 .need-help-btn{
