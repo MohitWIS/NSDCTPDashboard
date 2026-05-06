@@ -422,9 +422,12 @@ function getPartnerDocuments(tpId) {
                 <td style="color:var(--gray-500);">-</td>
                 <td>${dueDate}</td>
                 <td><span class="badge badge-${statusClass}">${status}</span></td>
-                <td class="view-link" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${item.Working || ''}")'>
+                <td class="view-link" onclick='downLoadQuarterlyInvoice("${item.Invoice || ''}", "${''}")'>
                     <img src="Icon/download_grey.svg"> Download
-                </td>                
+                </td>  
+                <td class="view-link" onclick='downLoadQuarterlyInvoice("${''}", "${item.Working || ''}")'>
+                    <img src="Icon/download_grey.svg"> Download
+                </td>               
                  <td>
                     <button class="btn-pay" onclick='window.open("https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=803602", "_blank")'><img src="Icon/credit-card_white.svg" alt="Credit Card" />  Pay Now</button>
                 </td>
@@ -1029,33 +1032,125 @@ function getSocialPerformance(tpId) {
 function getInformationHub() {
     var config1 = {
         app_name: "customer-management-account",
-        report_name: "Copy_of_All_Information_Hubs",
+        report_name: "Copy_of_All_Information_Hubs1",
     };
 
     ZOHO.CREATOR.DATA.getRecords(config1).then(function (res) {
         //console.log(res);
         var data = res.data[0];
 
-        var links = {
-            onboarding: data.Onboarding_SOP_Link,
-            operational: data.Operational_Guidelines_Link,
-            agreement: data.Agreement_Renewal_Process_Link,
-            sidh: data.SIDH_Process_Flow1,
-            monitoring: data.Monitoring_Guidelines_Link,
-            other: data.Other_Reference_Documents_Link
-        };
-        Object.keys(links).forEach(function (key) {
-
-            var el = document.getElementById(key);
-            var url = links[key];
-
-            if (el && url) {
-                el.onclick = function () {
-                    window.open(url, '_blank');
-                };
+        var linkConfig = {
+            onboarding: {
+                links: data.Onboarding_SOP_Link,
+                files: data.Onboarding_SOP
+            },
+            operational: {
+                links: data.Operational_Guidelines_Link,
+                files: data.Operational_Guidelines
+            },
+            agreement: {
+                links: data.Agreement_Renewal_Process_Link,
+                files: data.Agreement_Renewal_Process
+            },
+            sidh: {
+                links: data.SIDH_Process_Flow_Link,
+                files: data.SIDH_Process_Flow
+            },
+            monitoring: {
+                links: data.Monitoring_Guidelines_Link,
+                files: data.Monitoring_Guidelines
+            },
+            other: {
+                links: data.Other_Reference_Documents_Link,
+                files: data.Other_Reference_Documents
             }
+        };
+
+        Object.keys(linkConfig).forEach(function (key) {
+            var el = document.getElementById(key);
+            var config = linkConfig[key];
+
+            if (!el || !config.links) return;
+
+            var links = config.links
+                .split(",")
+                .map(function (x) { return x.trim(); })
+                .filter(Boolean);
+
+            if (!links.length) return;
+
+            el.onclick = function () {
+                var title = el.querySelector(".hub-label")
+                    ? el.querySelector(".hub-label").innerText
+                    : "Files";
+
+                if (links.length === 1) {
+                    window.open(links[0], "_blank");
+                } else {
+                    openFileModal(links, config.files || [], title);
+                }
+            };
         });
     });
+}
+
+function openFileModal(links, files,title) {
+    var modal = document.getElementById("fileRedirectModal");
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>${title} file list</h3>
+                <span class="close-modal" style="cursor:pointer;font-size:20px;">&times;</span>
+            </div>
+            <div class="file-list"></div>
+        </div>
+    `;
+
+    var fileList = modal.querySelector(".file-list");
+
+    links.forEach(function (link, index) {
+        var filePath = files[index] || "";
+        var fileName = getFileName(filePath);
+
+        var item = document.createElement("div");
+        item.className = "file-item";
+        item.innerText = fileName;
+
+        item.onclick = function () {
+            window.open(link, "_blank");
+            modal.style.display = "none";
+        };
+
+        fileList.appendChild(item);
+    });
+
+    modal.style.display = "flex";
+
+    // close button
+    modal.querySelector(".close-modal").onclick = function () {
+        modal.style.display = "none";
+    };
+
+    // close on outside click
+    modal.onclick = function (e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+function getFileName(path) {
+    if (!path) return "Open File";
+
+    var fileName = path.split("filepath=")[1] || path.split("/").pop() || "Open File";
+
+    // remove timestamp/random prefix before actual file name
+    // example: 1778066855128349_NSDC_Portal_Suggestions.docx
+    fileName = decodeURIComponent(fileName);
+    fileName = fileName.replace(/^\d+_/, "");
+
+    return fileName;
 }
 
 function openLink(url) {

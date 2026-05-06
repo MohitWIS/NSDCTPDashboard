@@ -374,6 +374,7 @@
             <th>Due Date</th>
             <th>Status</th>
             <th>Download Invoice</th>
+            <th>Download Working</th>
             <th>Payment</th>
             <th>UTR Number</th>
             <th>Payment Receipt</th>
@@ -393,7 +394,10 @@
 
  <div id="passwordModal" class="modal">
     <div class="modal-content">
-      <h3>Enter Password</h3>
+      <div class="modal-header">
+        <h3>Enter Password</h3>
+        <span class="close-modal" onclick="closePopup()">&times;</span>
+      </div>
       <input type="password" class="form-control" id="passwordInput" placeholder="Enter password" />
       <div class="actions">
         <button class="btn btn-success" onclick="checkPassword()">Submit</button>
@@ -403,6 +407,9 @@
       <p id="errorMsg"></p>
       <p id="timerMsg"></p>
     </div>
+  </div>
+
+  <div id="fileRedirectModal" class="modal">
   </div>
 
   <script type="text/javascript" src="widget.js"></script>
